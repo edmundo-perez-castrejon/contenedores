@@ -32,20 +32,21 @@ class Admin extends CI_Controller {
         $crud->where('username!=',"'root'", FALSE);
 
         $crud->set_table('users');
+        $crud->set_relation_n_n('proveedores','proveedores_users','proveedores','id_user','id_proveedor','rfc');
 
         $crud->set_theme('datatables');
-        $crud->columns('username','active','first_name','last_name','claves','id_empresa');
+        $crud->columns('username','active','first_name','last_name', 'proveedores');
 
-        $crud->fields('username','password','email','active','first_name','last_name','claves','id_empresa');
+        $crud->fields('username','password','email','active','first_name','last_name','proveedores');
 
         $crud->change_field_type('password','password');
 
         $crud->display_as('username','Usuario')
             ->display_as('email','Correo Electronico')
             ->display_as('first_name','Nombre')
-            ->display_as('last_name','Apellidos')
-            ->display_as('id_empresa','Empresa tratante')
-            ->display_as('claves','Contratos');
+            ->display_as('last_name','Apellidos');
+
+
 
 
         $output = $crud->render();

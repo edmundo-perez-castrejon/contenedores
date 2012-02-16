@@ -154,7 +154,7 @@
                 <?php
                     if($this->ion_auth->is_admin()):
                         ?>
-
+                <li><?php echo anchor('proveedores/listado','Proveedores'); ?></li>
                         <?php
                     endif;
                 ?>
