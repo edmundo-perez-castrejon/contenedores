@@ -80,8 +80,8 @@
         <div class="container">
             <a class="brand" href="#"><?php echo $this->config->item('nombre_sistema');?></a>
             <ul class="nav">
-                <li class="active"><a href="#">Inicio</a></li>
-                <li><a href="#contact">Contacto</a></li>
+                <!-- <li class="active"><a href="#">Inicio</a></li>-->
+                <!-- <li><a href="#contact">Contacto</a></li>-->
             </ul>
 
 

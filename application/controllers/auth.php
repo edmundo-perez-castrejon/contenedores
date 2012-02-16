@@ -28,8 +28,7 @@ class Auth extends CI_Controller {
 		elseif (!$this->ion_auth->is_admin())
 		{
 
-			echo 'dentro del sistema';
-            echo anchor('auth/logout','salir del sistema');
+			redirect('contenedores');
 		}
 		else
 		{
