@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Proveedores extends CI_Controller {
+class Pedimentos extends CI_Controller {
 
     private $data = null;
 
@@ -29,13 +29,23 @@ class Proveedores extends CI_Controller {
     {
         $crud = new grocery_CRUD();
 
-        $crud->set_table('proveedores');
+        $crud->set_table('pedimentos');
 
         $crud->set_theme('datatables');
 
+        $crud->set_relation('id_proveedor','proveedores','rfc');
+        $crud->set_relation('id_cliente','users','username');
+
+        $crud->display_as('id_proveedor','Proveedor')
+                ->display_as('id_cliente','Cliente');
+
+        $crud->set_rules('pedimento','Numero de Pedimento','required|is_unique[pedimentos.pedimento]|exact_length[16]|alpha_numeric');
+        $crud->set_rules('conocimiento_embarque','Conocimiento de embarque','required|is_unique[pedimentos.conocimiento_embarque]|exact_length[16]|alpha_numeric');
+        $crud->set_rules('cantidad_contenedores','Cantidad de contenedores','required|numeric|greater_than[0]');
+
         $output = $crud->render();
         $this->load->view('template/header',$output);
-        $this->load->view('proveedores/listado',$output);
+        $this->load->view('pedimentos/listado',$output);
         $this->load->view('template/footer');
     }
 

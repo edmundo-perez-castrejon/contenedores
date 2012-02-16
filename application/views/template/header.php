@@ -155,6 +155,7 @@
                     if($this->ion_auth->is_admin()):
                         ?>
                 <li><?php echo anchor('proveedores/listado','Proveedores'); ?></li>
+                <li><?php echo anchor('pedimentos/listado','Pedimentos'); ?></li>
                         <?php
                     endif;
                 ?>
