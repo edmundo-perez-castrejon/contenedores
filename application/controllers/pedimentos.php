@@ -46,6 +46,9 @@ class Pedimentos extends CI_Controller {
         #Facturas
         $crud->add_action('Facturas', '', 'pedimentos/facturas');
 
+        #Solo vera alguns campos para la edicion
+        $crud->edit_fields('cantidad_contenedores','id_proveedor','id_cliente');
+
         $output = $crud->render();
         $this->load->view('template/header',$output);
         $this->load->view('pedimentos/listado',$output);
@@ -63,18 +66,16 @@ class Pedimentos extends CI_Controller {
         $crud->columns('numero_factura');
         $crud->change_field_type('id_pedimento', 'hidden');
 
-        #agregar regla para unicidad de factura
-
-
+        #agregar el id automaticamente
         $crud->callback_before_insert(array($this,'before_insert_factura'));
 
         $output = $crud->render();
 
-        $this->load->model('pedimentos_model');
+        $this->load->model(array('pedimentos_model','clientes_model','proveedores_model'));
 
-        $datos_pedimento  = $this->pedimentos_model->get_datos($id_pedimento);
-
-        $data['datos_pedimento'] = $datos_pedimento;
+        $data['datos_pedimento']    = $this->pedimentos_model->get_datos($id_pedimento);
+        $data['datos_cliente']      = $this->clientes_model->get_datos($data['datos_pedimento']->id_cliente);
+        $data['datos_proveedor']    = $this->proveedores_model->get_datos($data['datos_pedimento']->id_proveedor);
 
 
         $this->load->view('template/header',$output);
