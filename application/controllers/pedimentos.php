@@ -43,12 +43,61 @@ class Pedimentos extends CI_Controller {
         $crud->set_rules('conocimiento_embarque','Conocimiento de embarque','required|is_unique[pedimentos.conocimiento_embarque]|exact_length[16]|alpha_numeric');
         $crud->set_rules('cantidad_contenedores','Cantidad de contenedores','required|numeric|greater_than[0]');
 
+        #Facturas
+        $crud->add_action('Facturas', '', 'pedimentos/facturas');
+
         $output = $crud->render();
         $this->load->view('template/header',$output);
         $this->load->view('pedimentos/listado',$output);
         $this->load->view('template/footer');
     }
 
+    public function facturas($id_pedimento){
+
+        $crud = new grocery_CRUD();
+        $crud->set_table('facturas_pedimentos');
+        $crud->set_theme('datatables');
+
+        $crud->where('id_pedimento', $id_pedimento);
+
+        $crud->columns('numero_factura');
+        $crud->change_field_type('id_pedimento', 'hidden');
+
+        #agregar regla para unicidad de factura
+
+
+        $crud->callback_before_insert(array($this,'before_insert_factura'));
+
+        $output = $crud->render();
+
+        $this->load->model('pedimentos_model');
+
+        $datos_pedimento  = $this->pedimentos_model->get_datos($id_pedimento);
+
+        $data['datos_pedimento'] = $datos_pedimento;
+
+
+        $this->load->view('template/header',$output);
+        $this->load->view('pedimentos/datos_pedimento', $data);
+        $this->load->view('pedimentos/listado',$output);
+        $this->load->view('template/footer');
+
+    }
+
+    public function before_insert_factura($post_array){
+        $totalSegment = $this->uri->total_segments();
+
+        $str = '';
+        for($i=0; $i<$totalSegment; $i++){
+            $str .= '_'. $this->uri->segment($i);
+        }
+
+//        $post_array['email'] = $str;
+        $post_array['id_pedimento'] = $this->uri->segment($totalSegment-1);
+
+        return $post_array;
+
+    }
 }
 
 

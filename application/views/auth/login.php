@@ -12,7 +12,8 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="<?php echo base_url();?>assets/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/bootstrap-1.4/bootstrap.css" rel="stylesheet">
+
     <style type="text/css">
             /* Override some defaults */
         html, body {
@@ -126,7 +127,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <footer>

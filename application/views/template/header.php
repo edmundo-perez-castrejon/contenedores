@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Emulate7" />
 
     <!-- Le styles -->
-    <link href="<?php echo base_url();?>assets/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/bootstrap-1.4/bootstrap.css" rel="stylesheet">
 
     <?php
     if(isset($css_files)):
@@ -162,7 +162,7 @@
 
                 <li><?php echo anchor('auth/logout','Salir');?></li>
             </ul>
-            <p class="pull-right">Sesión iniciada como <a href="#"><?php echo $this->session->userdata('username'); ?></a></p>
+            <p class="pull-right" style="color:#FFF;">Sesión iniciada como <a href="#"><?php echo $this->session->userdata('username'); ?></a></p>
 
         </div>
 
