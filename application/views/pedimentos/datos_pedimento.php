@@ -1,9 +1,9 @@
 
 <div class="row">
-    <div class="span14">
+    <div class="span16" align="center">
         <h2><?php echo $datos_pedimento->pedimento;?></h2>
     </div>
-    <div class="span7"><b>Cliente</b>
+    <div class="span8"><b>Cliente</b>
         <span class="label notice">
             <?php
             echo $datos_cliente->first_name.' '.$datos_cliente->last_name;
@@ -18,7 +18,7 @@
             ?>
         </span>
     </div>
-    <div class="span7" align="right">
+    <div class="span8" align="right">
         <b>Conocimiento embarque</b>
         <span class="label notice"><?php echo $datos_pedimento->conocimiento_embarque;?></span>
         <br/>
