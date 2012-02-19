@@ -28,7 +28,7 @@ class Auth extends CI_Controller {
 		elseif (!$this->ion_auth->is_admin())
 		{
 
-			redirect('contenedores');
+			redirect('pedimentos/listado');
 		}
 		else
 		{

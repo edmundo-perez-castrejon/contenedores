@@ -31,34 +31,49 @@ class Pedimentos extends CI_Controller {
 
         $crud->set_table('pedimentos');
 
-        $crud->set_theme('datatables');
+
 
         $crud->set_relation('id_proveedor','proveedores','rfc');
         $crud->set_relation('id_cliente','users','username');
+        //$crud->set_relation('id','facturas_pedimento','numero_factura');
 
-        $crud->columns('pedimento','id_cliente','id_proveedor','cantidad_contenedores','numero_cuenta_gastos','fecha_cuenta_gastos');
+        if(!$this->ion_auth->is_admin())
+        {
+
+            $crud->where('id_cliente',$this->session->userdata('user_id'));
+            $crud->columns('pedimento','id_proveedor','cantidad_contenedores','conocimiento_embarque','numero_cuenta_gastos','fecha_cuenta_gastos');
+
+            $crud->unset_edit();
+            $crud->unset_add();
+            $crud->unset_delete();
+
+            $crud->add_action('Ver detalle del pedimento',base_url().'images/report_magnify.png','pedimentos/detalle');
+
+        }else{
+            $crud->set_theme('datatables');
+            $crud->columns('pedimento','id_cliente','id_proveedor','cantidad_contenedores','numero_cuenta_gastos','fecha_cuenta_gastos');
+            #Facturas
+            $crud->add_action('Facturas', '', 'pedimentos/facturas');
+
+            #Estatus
+            $crud->add_action('Seguimiento', '', 'pedimentos/seguimiento');
+            #Callback para insertar los ESTATUS
+            $crud->callback_after_insert(array($this,'after_insert_pedimento'));
+
+            #Solo vera alguns campos para la edicion
+            $crud->edit_fields('cantidad_contenedores','id_proveedor','id_cliente','numero_cuenta_gastos','fecha_cuenta_gastos');
+
+            $crud->set_rules('pedimento','Numero de Pedimento','required|is_unique[pedimentos.pedimento]|exact_length[16]|alpha_numeric');
+            $crud->set_rules('conocimiento_embarque','Conocimiento de embarque','required|is_unique[pedimentos.conocimiento_embarque]|exact_length[16]|alpha_numeric');
+            $crud->set_rules('cantidad_contenedores','Cantidad de contenedores','required|numeric|greater_than[0]');
+
+        }
 
         $crud->display_as('id_proveedor','Proveedor')
                 ->display_as('id_cliente','Cliente')
                 ->display_as('numero_cuenta_gastos','No.Cta Gastos')
                 ->display_as('fecha_cuenta_gastos','Fech.Cta Gastos')
                 ->display_as('cantidad_contenedores','No.Contenedores');
-
-        $crud->set_rules('pedimento','Numero de Pedimento','required|is_unique[pedimentos.pedimento]|exact_length[16]|alpha_numeric');
-        $crud->set_rules('conocimiento_embarque','Conocimiento de embarque','required|is_unique[pedimentos.conocimiento_embarque]|exact_length[16]|alpha_numeric');
-        $crud->set_rules('cantidad_contenedores','Cantidad de contenedores','required|numeric|greater_than[0]');
-
-        #Facturas
-        $crud->add_action('Facturas', '', 'pedimentos/facturas');
-
-        #Estatus
-        $crud->add_action('Seguimiento', '', 'pedimentos/seguimiento');
-        #Callback para insertar los ESTATUS
-        $crud->callback_after_insert(array($this,'after_insert_pedimento'));
-
-        #Solo vera alguns campos para la edicion
-        $crud->edit_fields('cantidad_contenedores','id_proveedor','id_cliente','numero_cuenta_gastos','fecha_cuenta_gastos');
-
 
 
         $output = $crud->render();
@@ -73,6 +88,10 @@ class Pedimentos extends CI_Controller {
         $crud->set_table('facturas_pedimentos');
         //$crud->set_theme('datatables');
 
+        if(!$this->ion_auth->is_admin())
+        {
+            $crud->unset_operations();
+        }
         $crud->where('id_pedimento', $id_pedimento);
 
         $crud->columns('numero_factura');
@@ -83,12 +102,9 @@ class Pedimentos extends CI_Controller {
 
         $output = $crud->render();
 
-
-
         $data['datos_pedimento']    = $this->pedimentos_model->get_datos($id_pedimento);
         $data['datos_cliente']      = $this->clientes_model->get_datos($data['datos_pedimento']->id_cliente);
         $data['datos_proveedor']    = $this->proveedores_model->get_datos($data['datos_pedimento']->id_proveedor);
-
 
         $this->load->view('template/header',$output);
         $this->load->view('pedimentos/datos_pedimento', $data);
@@ -180,6 +196,44 @@ class Pedimentos extends CI_Controller {
         $data['descripcion'] = "Corte de moras";
         $this->seguimiento_model->nuevo($data);
 
+    }
+
+    public function detalle($id_pedimento)
+    {
+        $crud = new grocery_CRUD();
+        $crud->set_table('seguimiento');
+        //$crud->set_theme('datatables');
+
+        $crud->where('id_pedimento', $id_pedimento);
+
+        $crud->unset_operations();
+        $crud->columns('estatus','descripcion','fecha');
+
+        $data['datos_pedimento']    = $this->pedimentos_model->get_datos($id_pedimento);
+        $data['datos_cliente']      = $this->clientes_model->get_datos($data['datos_pedimento']->id_cliente);
+        $data['datos_proveedor']    = $this->proveedores_model->get_datos($data['datos_pedimento']->id_proveedor);
+
+
+        $output = $crud->render();
+        $data['output'] = $output;
+
+        #Obtener las facturas
+        $this->load->model('facturas_model');
+        $lst_facturas = $this->facturas_model->get_datos($id_pedimento);
+        $facturas_str = '';
+
+        foreach($lst_facturas as $factura)
+        {
+            $facturas_str .= $factura->numero_factura.', ';
+        }
+        $facturas_str = substr($facturas_str,1,strlen($facturas_str)-3).'.';
+
+        $data['datos_proveedor']->facturas = $facturas_str;
+
+
+        $this->load->view('template/header',$output);
+        $this->load->view('pedimentos/detalle',$data);
+        $this->load->view('template/footer');
     }
 }
 

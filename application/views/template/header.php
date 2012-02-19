@@ -147,7 +147,7 @@
                     if($this->ion_auth->is_admin()){
                         echo anchor('admin/grocery_usuarios','Usuarios');
                     }else{
-                        echo anchor('contratos','Contratos');
+                        echo anchor('pedimentos/listado','Pedimentos');
                     }
                     ?>
                 </li>

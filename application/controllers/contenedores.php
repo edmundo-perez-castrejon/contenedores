@@ -23,11 +23,7 @@ class Contenedores extends CI_Controller {
 
     public function index()
     {
-        $this->data['output'] = 'Dentro del sistema';
-
-        $this->load->view('template/header', $this->data);
-        $this->load->view('contenedores/index');
-        $this->load->view('template/footer');
+        echo 'Index of contenedores';
     }
 }
 
