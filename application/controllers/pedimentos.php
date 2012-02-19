@@ -82,7 +82,8 @@ class Pedimentos extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-    public function facturas($id_pedimento){
+    public function facturas($id_pedimento)
+    {
 
         $crud = new grocery_CRUD();
         $crud->set_table('facturas_pedimentos');
@@ -113,7 +114,8 @@ class Pedimentos extends CI_Controller {
 
     }
 
-    public function seguimiento($id_pedimento){
+    public function seguimiento($id_pedimento)
+    {
         $crud = new grocery_CRUD();
         $crud->set_table('seguimiento');
         //$crud->set_theme('datatables');
@@ -141,9 +143,8 @@ class Pedimentos extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-
-
-    public function before_insert_factura($post_array){
+    public function before_insert_factura($post_array)
+    {
         $totalSegment = $this->uri->total_segments();
 
         $str = '';
@@ -158,7 +159,8 @@ class Pedimentos extends CI_Controller {
 
     }
 
-    public function after_insert_pedimento($post_array, $id){
+    public function after_insert_pedimento($post_array, $id)
+    {
 
         $comma_separated = implode(",", $post_array);
         /*
@@ -233,6 +235,45 @@ class Pedimentos extends CI_Controller {
 
         $this->load->view('template/header',$output);
         $this->load->view('pedimentos/detalle',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function finalizados()
+    {
+        $crud = new grocery_CRUD();
+
+        $crud->set_table('pedimentos');
+
+        $crud->set_relation('id_proveedor','proveedores','rfc');
+        $crud->set_relation('id_cliente','users','username');
+        //$crud->set_relation('id','facturas_pedimento','numero_factura');
+
+
+        //$crud->where('id_cliente',$this->session->userdata('user_id'));
+        $crud->where('numero_cuenta_gastos>0','',FALSE);
+
+        $crud->columns('pedimento','id_proveedor','cantidad_contenedores','conocimiento_embarque','numero_cuenta_gastos','fecha_cuenta_gastos');
+
+        $crud->unset_edit();
+        $crud->unset_add();
+        $crud->unset_delete();
+
+        $crud->add_action('Ver detalle del pedimento',base_url().'images/report_magnify.png','pedimentos/detalle');
+        //$crud->unset_operations();
+
+
+        $crud->display_as('id_proveedor','Proveedor')
+            ->display_as('id_cliente','Cliente')
+            ->display_as('numero_cuenta_gastos','No.Cta Gastos')
+            ->display_as('fecha_cuenta_gastos','Fech.Cta Gastos')
+            ->display_as('cantidad_contenedores','No.Contenedores');
+
+        $output = $crud->render();
+        $output->title = "Pedimentos finalizados";
+
+
+        $this->load->view('template/header',$output);
+        $this->load->view('pedimentos/finalizados',$output);
         $this->load->view('template/footer');
     }
 }

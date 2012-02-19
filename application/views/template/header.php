@@ -157,6 +157,10 @@
                 <li><?php echo anchor('proveedores/listado','Proveedores'); ?></li>
                 <li><?php echo anchor('pedimentos/listado','Pedimentos'); ?></li>
                         <?php
+                    else:
+                        ?>
+                    <li><?php echo anchor('pedimentos/finalizados','Finalizados'); ?></li>
+                        <?
                     endif;
                 ?>
 
