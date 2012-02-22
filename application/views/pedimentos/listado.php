@@ -1,9 +1,18 @@
-<?php
+<div class=well style="background-image: url('<?php echo base_url().'images/system/pedimento.jpg'?>');
+    background-size:180px 100px;
+    background-repeat:no-repeat;
+    background-position:right;">
 
-    if(isset($title)){
-        echo '<h1>'.$title.'</h1>';
+<?php    if(!isset($title)){ ?>
+        <h2>Administracion de Pedimentos</h2>
+<?php
+}else{
+        echo '<h2>'.$title.'</h2>';
     }
+
 ?>
+</div>
+
 <div class='mainInfo'>
     <div class="row">
 

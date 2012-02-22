@@ -18,7 +18,9 @@ class Proveedores extends CI_Controller {
         }else{
             $this->load->library('session');
             #$this->load->library('salidas_lib');
-            #$this->load->model(array('contratos_model','clientes_model','buques_model','bodegas_model','destinos_model'));
+
+            $this->load->model(array('configuracion_model'));
+            $this->config->set_item('nombre_sistema',$this->configuracion_model->get_nombre_sistema());
             $this->load->helper(array('url','form'));
         }
 

@@ -18,6 +18,8 @@ class Contenedores extends CI_Controller {
         }else{
             $this->load->library('session');
             $this->load->helper(array('url','form'));
+            $this->load->model(array('configuracion_model'));
+            $this->config->set_item('nombre_sistema',$this->configuracion_model->get_nombre_sistema());
         }
     }
 

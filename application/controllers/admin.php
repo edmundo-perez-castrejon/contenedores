@@ -18,7 +18,8 @@ class Admin extends CI_Controller {
         }else{
             $this->load->library('session');
             #$this->load->library('salidas_lib');
-            #$this->load->model(array('contratos_model','clientes_model','buques_model','bodegas_model','destinos_model'));
+            $this->load->model(array('configuracion_model'));
+            $this->config->set_item('nombre_sistema',$this->configuracion_model->get_nombre_sistema());
             $this->load->helper(array('url','form'));
         }
 
@@ -52,6 +53,25 @@ class Admin extends CI_Controller {
         $output = $crud->render();
         $this->load->view('template/header',$output);
         $this->load->view('admin/listado_usuarios',$output);
+        $this->load->view('template/footer');
+    }
+
+    public function configuracion()
+    {
+        $crud = new grocery_CRUD();
+
+        $crud->set_theme('datatables');
+        $crud->set_table('configuracion');
+
+        $crud->set_field_upload('imagen_frontal','images/front');
+        $crud->unset_add();
+
+        $crud->unset_delete();
+
+        $output = $crud->render();
+
+        $this->load->view('template/header',$output);
+        $this->load->view('admin/configuracion',$output);
         $this->load->view('template/footer');
     }
 

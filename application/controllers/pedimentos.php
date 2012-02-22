@@ -19,6 +19,8 @@ class Pedimentos extends CI_Controller {
             $this->load->library('session');
             #$this->load->library('salidas_lib');
             $this->load->model(array('pedimentos_model','clientes_model','proveedores_model','seguimiento_model'));
+            $this->load->model(array('configuracion_model'));
+            $this->config->set_item('nombre_sistema',$this->configuracion_model->get_nombre_sistema());
             $this->load->helper(array('url','form'));
         }
 
@@ -249,7 +251,7 @@ class Pedimentos extends CI_Controller {
         //$crud->set_relation('id','facturas_pedimento','numero_factura');
 
 
-        //$crud->where('id_cliente',$this->session->userdata('user_id'));
+        $crud->where('id_cliente',$this->session->userdata('user_id'));
         $crud->where('numero_cuenta_gastos>0','',FALSE);
 
         $crud->columns('pedimento','id_proveedor','cantidad_contenedores','conocimiento_embarque','numero_cuenta_gastos','fecha_cuenta_gastos');

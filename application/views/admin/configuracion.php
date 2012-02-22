@@ -2,8 +2,9 @@
     background-size:180px 80px;
     background-repeat:no-repeat;
     background-position:right;">
-    <h2>Administracion de Usuarios</h2>
+    <h2>Configuracion del sistema</h2>
 </div>
+
 <div class='mainInfo'>
     <div class="row">
 

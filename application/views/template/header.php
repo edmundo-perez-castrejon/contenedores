@@ -156,6 +156,7 @@
                         ?>
                 <li><?php echo anchor('proveedores/listado','Proveedores'); ?></li>
                 <li><?php echo anchor('pedimentos/listado','Pedimentos'); ?></li>
+                        <li><?php echo anchor('admin/configuracion','Configuracion'); ?></li>
                         <?php
                     else:
                         ?>
