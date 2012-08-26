@@ -161,7 +161,7 @@
                     else:
                         ?>
                     <li><?php echo anchor('pedimentos/finalizados','Finalizados'); ?></li>
-                        <?
+                        <?php
                     endif;
                 ?>
 
